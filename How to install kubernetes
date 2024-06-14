@@ -1,0 +1,75 @@
+# Docker:
+Set up Docker's apt repository.
+### Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+### Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+2- To install the latest version, run:
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+3- Verify that the Docker Engine installation is successful by running the hello-world image.
+sudo docker run hello-world
+
+### Check
+containerd --version
+containerd containerd.io 1.6.33 d2d58213f83a351ca8f528a95fbd145f5654e957
+
+# Config Containerd:
+1- containerd config default >/etc/containerd/config.toml
+2- vim /etc/containerd/config.toml
+![edit file](image-1.png)
+3- systemctl restart containerd.service
+## config ubuntu 
+
+1- modprobe br_netfilter overlay
+2- for check 1:
+lsmod | grep -i br
+lsmod | grep -i lay
+![grep](image-2.png)
+3- vim /etc/modules-load.d/modules.conf 
+add :
+br_netfilter
+overlay
+![add](image-3.png)
+
+4- vim /etc/sysctl.conf 
+uncomment net.ipv4.ip_forward=1 (line 28)
+
+5- check 4: 
+sysctl -p
+if show  net.ipv4.ip_forward=1 go next
+
+6- sysctl --system
+
+# start install Kubernetes
+1- sudo apt-get update
+
+2- sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+
+3- sudo mkdir -p -m 755 /etc/apt/keyrings
+
+(need vpn)
+4- curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+5- echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+6- sudo apt-get update
+7 - find version repository 6
+apt-cache policy kubeadm
+![check](image-4.png)
+8- sudo apt-get install -y kubelet kubeadm kubectl
+9- you have to hold to prevent other admin change the version:
+sudo apt-mark hold kubelet kubeadm kubectl
+10 - Enable the kubelet service before running kubeadm
+sudo systemctl enable --now kubelet
