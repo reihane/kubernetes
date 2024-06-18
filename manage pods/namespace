@@ -1,0 +1,14 @@
+# create namespace:
+1- cd workspace/workload
+2- vim ns.yml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-ns 
+4- export KUBECONFIG=/root/.kube/config
+5- kubectl get nodes
+6- kubectl apply -f ns.yml 
+7- check 6:
+kubectl get ns
+you must get this result
+my-ns             Active   2m58s
