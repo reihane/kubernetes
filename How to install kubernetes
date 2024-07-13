@@ -28,7 +28,7 @@ containerd containerd.io 1.6.33 d2d58213f83a351ca8f528a95fbd145f5654e957
 # Config Containerd:
 1- containerd config default >/etc/containerd/config.toml
 2- vim /etc/containerd/config.toml
-![edit file](image-1.png)
+
 3- systemctl restart containerd.service
 ## config ubuntu 
 
