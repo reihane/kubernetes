@@ -29,6 +29,7 @@ containerd containerd.io 1.6.33 d2d58213f83a351ca8f528a95fbd145f5654e957
 1- containerd config default >/etc/containerd/config.toml
 2- vim /etc/containerd/config.toml
 line 139 (: set number) - change SystemdCgroup = true  ( t have to be in lower case)
+Image 1
 3- systemctl restart containerd.service
 ## config ubuntu 
 
